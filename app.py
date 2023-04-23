@@ -34,18 +34,16 @@ def new_game():
 def score_word():
     """Handles post request to score word when given game_id and word"""
 
-    data = request.get_json()
-    game_id = data["game_id"]
-    word = data["word"]
+    word = request.json["word"].upper()
+    game_id = request.json["gameId"]
+    game = games[game_id]
 
-    game_instance = games[game_id]
-
-    is_on_board = game_instance.check_word_on_board(word)
-    is_word = game_instance.is_word_in_word_list(word)
-
-    if is_on_board and is_word:
-        return {"result": "ok"}
-    elif not is_word:
+    if not game.is_word_in_word_list(word):
         return {"result": "not-word"}
-    else:
+
+    elif not game.check_word_on_board(word):
         return {"result": "not-on-board"}
+
+    else:
+        game.play_and_score_word(word)
+        return {"result": "ok"}
