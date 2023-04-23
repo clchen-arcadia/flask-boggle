@@ -32,22 +32,55 @@ function displayBoard(board) {
   }
 }
 
-// await axios.post("/api/score-word")
+/** Handle form submit: submit to API, focus on input. */
 
-const BASE_URL = 'http://localhost:5001'
-const testWord = "ALBUMS"
-const testGameId = 'testtesttesttestestHI'
+async function handleFormSubmit(evt) {
+  evt.preventDefault();
 
-async function testScoreWord() {
+  const word = $wordInput.val().toUpperCase();
+  if (!word) return;
+
+  await submitWordToAPI(word);
+
+  $wordInput.val("").focus();
+}
+
+$form.on("submit", handleFormSubmit);
+
+/** Submit word to API and handle response. */
+
+async function submitWordToAPI(word) {
   const response = await axios({
-    url: `/api/score-word`,
+    url: "/api/score-word",
     method: "POST",
-    data: {
-      'word': testWord,
-      'game_id': testGameId
-    },
+    data: { word, gameId }
   });
-  return response;
+
+  const { result } = response.data;
+
+  if (result === "not-word") {
+    showMessage(`Not valid word: ${word}`, "err");
+  } else if (result === "not-on-board") {
+    showMessage(`Not on board: ${word}`, "err");
+  } else {
+    showWord(word);
+    showMessage(`Added: ${word}`, "ok");
+  }
+}
+
+/** Add word to played word list in DOM */
+
+function showWord(word) {
+  $($playedWords).append($("<li>", { test: word }));
+}
+
+/** Show status message. */
+
+function showMessage(msg, cssClass) {
+  $message
+    .text(msg)
+    .removeClass()
+    .addClass(`msg ${cssClass}`);
 }
 
 
