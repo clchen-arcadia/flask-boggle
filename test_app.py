@@ -4,17 +4,14 @@ from app import app, games
 
 from boggle import BoggleGame
 
-
-TEST_GAME = BoggleGame() #this is not a global const
-TEST_GAME.board = [
+test_game = BoggleGame()
+test_game.board = [
     ['K','B','O','F','E'],
     ['S','I','E','K','D'],
     ['A','H','O','B','G'],
     ['E','A','S','S','L'],
     ['E','W','L','L','K']
 ]
-
-games['d34ad458-eaaa-49fc-9dd1-b7e8999bae1f'] = TEST_GAME
 
 # Make Flask errors be real errors, not HTML pages with error info
 app.config['TESTING'] = True
@@ -23,6 +20,7 @@ app.config['TESTING'] = True
 app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
 
 TEST_GAME_ID = 'd34ad458-eaaa-49fc-9dd1-b7e8999bae1f'
+games[TEST_GAME_ID] = test_game
 
 
 class BoggleAppTestCase(TestCase):
