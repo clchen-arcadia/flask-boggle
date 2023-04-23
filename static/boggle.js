@@ -22,8 +22,14 @@ async function start() {
 /** Display board */
 
 function displayBoard(board) {
-  // $table.empty();
-  // loop over board and create the DOM tr/td structure
+  $table.empty();
+  for (let row of board) {
+    let $tr = $("<tr>");
+    for (let letter of row) {
+      $tr.append(`<td>${letter}</td>`);
+    }
+    $table.append($tr);
+  }
 }
 
 // await axios.post("/api/score-word")
