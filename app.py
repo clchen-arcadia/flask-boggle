@@ -1,4 +1,3 @@
-from urllib import response
 from flask import Flask, request, render_template, jsonify
 from uuid import uuid4
 
@@ -27,9 +26,8 @@ def new_game():
     game_id = str(uuid4())
     game = BoggleGame()
     games[game_id] = game
-    board = game.board
 
-    return {"game_id": game_id, "board": board}
+    return jsonify(gameId=game_id, board=game.board)
 
 
 @app.post('/api/score-word')
